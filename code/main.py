@@ -10,6 +10,11 @@ import cv2
 import random
 
 
+NUM_OF_EPOCHS = 2
+BATCH_SIZE = 50
+
+
+
 def setup_dataset(data_set):
     data_set = data_set.reshape(len(data_set), 32, 32, 3)
     data_set = data_set/255.0
@@ -118,6 +123,7 @@ def predict_animal(file, model):
     # a=[]
     # a.append(ar)
     # a=np.array(a)
+    file = np.expand_dims(file, axis=0)
     score=model.predict(file, verbose=1)
     print(score)
     label_index=np.argmax(score)
@@ -131,6 +137,7 @@ def predict_animal(file, model):
 if __name__ == '__main__':
 
     x_train, y_train, x_test, y_test, X_val, Y_val = get_final_dataset()
+
 
     model = Sequential()
     model.add(Conv2D(filters=16, kernel_size=2, padding="same", activation="relu", input_shape=(32, 32, 3)))
@@ -147,12 +154,11 @@ if __name__ == '__main__':
     model.summary()
 
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-    model.fit(x_train, y_train, validation_data=(X_val, Y_val), batch_size=50, epochs=10)
+    model.fit(x_train, y_train, validation_data=(X_val, Y_val), batch_size=BATCH_SIZE, epochs=NUM_OF_EPOCHS)
     score = model.evaluate(x_test, y_test, verbose=1)
     print('\n', 'Test accuracy:', score[1])
 
-    print(x_train.shape)
-    print(x_test.shape)
+
     for i in range(10):
         idx = random.randint(0, 1000)
         plt.imshow(x_test[idx], interpolation='nearest')
