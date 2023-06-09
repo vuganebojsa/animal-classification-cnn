@@ -37,8 +37,6 @@ def save_array_to_csv(array, csv_path):
 # save_array_to_csv(cats, 'data/csv/val/cats.csv')
 # save_array_to_csv(wild, 'data/csv/val/wild.csv')
 
-# more_test = convert_images_to_array('data/more_test_files')
-# save_array_to_csv(more_test, 'data/csv/more_test_files/more_test_files.csv')
 
 
 
