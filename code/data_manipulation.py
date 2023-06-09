@@ -1,29 +1,49 @@
 import os
 from PIL import Image
 import numpy as np
+import cv2
+import pandas as pd
 data = []
 labels = []
-
 # dog = 0, cat = 1, wild = 2
 LABELS = ['dog', 'cat', 'wild']
 
 # train data
 
 
-def get_data(image_type, label_order):
-    BASE_PATH = '../data/train/'
+def convert_images_to_array(folder_path):
+    image_list = []
+    for filename in os.listdir(folder_path):
+        if filename.endswith(".jpg") or filename.endswith(".png"):
+            img_path = os.path.join(folder_path, filename)
+            img = cv2.imread(img_path)
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # Convert BGR to RGB
+            img = cv2.resize(img, (32, 32))  # Resize the image to desired dimensions
+            image_list.append(img)
 
-    images = os.listdir('../data/train/' + image_type)
-    for image in images:
-        img = Image.open(BASE_PATH + image_type +  '/' + image)
-        arr_img = Image.fromarray(img, 'RGB')
-        resized_img = arr_img.resize((50, 50))
-        data.append(np.array(resized_img))
-        labels.append(label_order)
+    image_array = np.array(image_list)
+    return image_array
 
 
-get_data('dog', 0)
-get_data('cat', 1)
-get_data('wild', 2)
+def save_array_to_csv(array, csv_path):
+    df = pd.DataFrame(array.reshape(array.shape[0], -1))  # Reshape array to 2D
+    df.to_csv(csv_path, index=False)
+
+# dogs = convert_images_to_array('data/train/dog')
+# cats = convert_images_to_array('data/train/cat')
+# wild = convert_images_to_array('data/train/wild')
+# save_array_to_csv(dogs, 'data/csv/train/dogs.csv')
+# save_array_to_csv(cats, 'data/csv/train/cats.csv')
+# save_array_to_csv(wild, 'data/csv/train/wild.csv')
+
+
+# dogs = convert_images_to_array('data/val/dog')
+# cats = convert_images_to_array('data/val/cat')
+# wild = convert_images_to_array('data/val/wild')
+# save_array_to_csv(dogs, 'data/csv/val/dogs.csv')
+# save_array_to_csv(cats, 'data/csv/val/cats.csv')
+# save_array_to_csv(wild, 'data/csv/val/wild.csv')
+
+
 
 
