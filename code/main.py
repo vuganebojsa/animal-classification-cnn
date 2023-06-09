@@ -8,6 +8,7 @@ from keras.models import Sequential
 from keras.layers import Conv2D,MaxPooling2D,Dense,Flatten,Dropout
 import cv2
 import random
+from keras.models import load_model
 
 
 NUM_OF_EPOCHS = 10
@@ -169,14 +170,16 @@ def get_model():
     model.summary()
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     model.fit(x_train, y_train, validation_data=(X_val, Y_val), batch_size=BATCH_SIZE, epochs=NUM_OF_EPOCHS)
+    model.save('model.h5')
     return model
 
 
 if __name__ == '__main__':
 
     x_train, y_train, x_test, y_test, X_val, Y_val = get_final_dataset()
-
-    model = get_model()
+    #
+    # model = get_model()
+    model = load_model('model.h5')
     score = model.evaluate(x_test, y_test, verbose=1)
     print('\n', 'Test accuracy:', score[1])
 
