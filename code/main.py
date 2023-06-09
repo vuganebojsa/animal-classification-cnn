@@ -184,7 +184,7 @@ if __name__ == '__main__':
     print('\n', 'Test accuracy:', score[1])
 
     for i in range(10):
-        idx = random.randint(0, 1000)
+        idx = random.randint(0, len(x_test) - 1)
         plt.imshow(x_test[idx], interpolation='nearest')
         plt.show()
         predict_animal(x_test[idx], model)
