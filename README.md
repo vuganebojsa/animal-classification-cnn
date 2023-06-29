@@ -25,12 +25,12 @@ Za trening i test ima ukupno 14630 slika, dok za validaciju ima 1500.
 3. Nakon uspesne aktivacije potrebno je instalirati biblioteke navedene ispod komandom pip install naziv_biblioteke
 
 Biblioteke:
-numpy
-scikit-learn
-keras
-cv2
-Pillow
-matplotlib
+numpy, 
+scikit-learn, 
+keras, 
+cv2, 
+Pillow, 
+matplotlib, 
 
 4. Nakon sto su sve biblioteke implementirane moze se pokrenuti projekat komandom py code/main.py
 
