@@ -1,6 +1,6 @@
-#Animal Classification using Convolutional Neural Networks
+# Animal Classification using Convolutional Neural Networks
 
-##Autor: Nebojsa Vuga SV53/2020
+## Autor: Nebojsa Vuga SV53/2020
 
 ## Tema
 # Klasifikacija vrste zivotinje pomocu konvolucione neuronske mreze
