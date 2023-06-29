@@ -9,10 +9,11 @@ from keras.layers import Conv2D,MaxPooling2D,Dense,Flatten,Dropout
 import cv2
 import random
 from keras.models import load_model
+from keras.callbacks import History
 
 
-NUM_OF_EPOCHS = 10
-BATCH_SIZE = 50
+NUM_OF_EPOCHS = 50
+BATCH_SIZE = 32
 IMAGE_SIZE = 32
 NUM_OF_CLASSES = 3
 
@@ -99,6 +100,11 @@ def shuffled_loaded_dataset():
 
 
 def get_final_dataset():
+    '''
+
+        Gets final sorted out data in the right format, shape etc
+    :   return: Returns values for X_train, Y_train, x_test, y_tesy,  X_validation, Y_validation
+    '''
     X_train, Y_train, X_val, Y_val = shuffled_loaded_dataset()
     # get total different classes
     num_classes = len(np.unique(Y_train))
@@ -148,12 +154,17 @@ def predict_animal(file, model):
     animal=get_animal_name(label_index)
     print('-----------------------------')
     print(label_index)
-    print(score)
+    print('Scores: ' + str(np.around(score, 4)))
     print(animal)
     print("The predicted Animal is a "+animal+" with accuracy =    "+str(acc))
 
 
 def get_model():
+
+    # used for plots
+    #history = History()
+
+
     model = Sequential()
     model.add(
         Conv2D(filters=16, kernel_size=2, padding="same", activation="relu", input_shape=(IMAGE_SIZE, IMAGE_SIZE, 3)))
@@ -169,7 +180,20 @@ def get_model():
     model.add(Dense(NUM_OF_CLASSES, activation="softmax"))
     model.summary()
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-    model.fit(x_train, y_train, validation_data=(X_val, Y_val), batch_size=BATCH_SIZE, epochs=NUM_OF_EPOCHS)
+    model.fit(x_train, y_train, validation_data=(X_val, Y_val), 
+              batch_size=BATCH_SIZE, epochs=NUM_OF_EPOCHS, callbacks=[history])
+    
+    # plots for poster
+    # accuracy_values = history.history['accuracy']
+    # val_accuracy_values = history.history['val_accuracy']
+    # plt.figure()
+    # plt.plot(val_accuracy_values, label = 'Validation accuracy')
+    # plt.plot(accuracy_values, label = 'Training accuracy')
+    # plt.xlabel('Number of Epochs')
+    # plt.ylabel('Accuracy')
+    # plt.title('Accuracy vs. Number of Epochs')
+    # plt.legend()
+    # plt.show()
     model.save('model.h5')
     return model
 
@@ -177,12 +201,20 @@ def get_model():
 if __name__ == '__main__':
 
     x_train, y_train, x_test, y_test, X_val, Y_val = get_final_dataset()
-    #
-    # model = get_model()
+ 
+    # model training 
+    #model = get_model()
+    
+    # model loading
     model = load_model('model.h5')
-    score = model.evaluate(x_test, y_test, verbose=1)
-    print('\n', 'Test accuracy:', score[1])
 
+    # model evaulation
+    score = model.evaluate(x_test, y_test, verbose=1)
+    score_validation = model.evaluate(X_val, Y_val, verbose=1)
+    print('\n', 'Test accuracy:', score[1])
+    print('\n', 'Validation accuracy:', score_validation[1])
+    
+    # testing with random images from test set
     for i in range(10):
         idx = random.randint(0, len(x_test) - 1)
         plt.imshow(x_test[idx], interpolation='nearest')
