@@ -38,3 +38,5 @@ Pre pokretanja imate izbor da otkomentarisete kod ako hocete da istrenirate mode
 
 Kada se pokrene program i ucita model, izlazice vam 10 random slika iz test skupa na ekranu,
 koje kada se zatvore daju ispis u konzolu koji predstavlja pretpostavku modela o kojoj je zivotinji rec. 
+
+![](posterSlika.png?raw=true)
